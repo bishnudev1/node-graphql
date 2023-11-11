@@ -3,9 +3,9 @@ import { session } from '../db/conn.js';
 export const resolvers = {
     Query: {
         hello: () => "Hello World :)",
-        getMyProfile: async () => {
+        getMyProfile: async (_, {name}) => {
             try {
-                const resp = await session.run("MATCH (n:User) WHERE n.name = 'Bishnudev Khutia' RETURN n");
+                const resp = await session.run("MATCH (n:User {name: $name}) RETURN n", { name });
                 // const result = await resp.next();
                 const result = resp.records[0];
                 return {

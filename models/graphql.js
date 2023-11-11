@@ -4,7 +4,7 @@ export const typeDefs = gql`
 type Query {
     hello: String,
     getAllUsers: [User],
-    getMyProfile: User
+    getMyProfile(name: String): User
 }
 
 type Mutation {

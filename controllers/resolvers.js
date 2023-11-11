@@ -6,7 +6,8 @@ export const resolvers = {
         getMyProfile: async () => {
             try {
                 const resp = await session.run("MATCH (n:User) WHERE n.name = 'Bishnudev Khutia' RETURN n");
-                const result = await resp.next();
+                // const result = await resp.next();
+                const result = resp.records[0];
                 return {
                     id: result.get('n').identity.low,
                     name: result.get('n').properties.name,
@@ -41,7 +42,7 @@ export const resolvers = {
                     name,
                     email
                 });
-                const userNode = resp.records[0].get("u");
+                const userNode = resp.records[0].get("n");
                 return {
                     id: userNode.identity.low,
                     name: userNode.properties.name,

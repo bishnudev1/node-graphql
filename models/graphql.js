@@ -6,6 +6,13 @@ type Query {
     getAllUsers: [User],
     getMyProfile: User
 }
+
+type Mutation {
+    createUser(name: String, email: String): User,
+    deleteUser(id: Int): Boolean,
+    updateUser(id: Int, name: String, email: String): User
+}
+
 type User {
     id: Int
     name: String

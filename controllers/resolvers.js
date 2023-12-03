@@ -3,8 +3,13 @@ import { session } from '../db/conn.js';
 export const resolvers = {
     Query: {
         hello: () => "Hello World :)",
-        getMyProfile: async (_, {name}) => {
+        getMyProfile: async (parent, args, context) => {
             try {
+                if(context.userRoles.indexOf('USER') === -1){
+                    throw new Error('Unauthorized');
+                }
+                const {name} = args;
+
                 const resp = await session.run("MATCH (n:User {name: $name}) RETURN n", { name });
                 // const result = await resp.next();
                 const result = resp.records[0];
@@ -18,8 +23,12 @@ export const resolvers = {
                 return null; // Or handle error as needed
             }
         },
-        getAllUsers: async () => {
+        getAllUsers: async (parent, args, context) => {
             try {
+                if(context.userRoles.indexOf('ADMIN') === -1){
+                    throw new Error('Unauthorized');
+                }
+
                 const resp = await session.run("MATCH (n:User) RETURN n");
                 const data = resp.records.map((record) => {
                     return {
